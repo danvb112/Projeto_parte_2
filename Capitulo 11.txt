@@ -1,0 +1,275 @@
+BANCO DE DADOS
+
+- Alguns conceitos são importantissímos para o estudo de banco de dados como: campos, registros, tabelas
+e tipos de dados.
+
+- Campos são a menor unidade de informação em um sistema gerenciador de banco de dados. Se fizermos uma
+comparação com uma agenda escrita no papel, nome e telefone seriam dois campos. O campo nome armazenaria
+o nome de cada contato e o campo telefone, o número de telefone, respectivamente.
+
+- Cada linha da agenda seria chamada de registro. Um registro é formado por um conjunto conhecido de
+campos. Em nosso exemplo, cada pessoa na agenda, com seu nome e telefone, formaria um registro.
+
+- Podemos pensar em tabelas do banco de dados como a unidade de armazenamento de registros do mesmo tipo
+Imagine uma entrada da agenda telefônica onde cada registro, contendo nome e telefone, seria armazenado.
+O conjunto de registros do mesmo tipo é organizado em tabelas, nesse caso, na tabela agenda ou lista te-
+lefônica.
+
+- SQL (Structured Query Language/ Linguagem de Consulta Estruturada) é a linguagem usada para criar
+bancos de dados, gerar consultas, manipular(inserir, atualizar, alterar e apagar) registros e principal-
+mente, realizar consultas. É uma linguagem de programação especializada na manipulação de dados, baseada
+ma álgebra relacional.
+
+- O SQLite é um gerenciador de banco de dados leve e completo, muito utilizado e presente mesmo em tele-
+fones celulares. Uma da principais características é não precisar de um servidor dedicado, sendo capaz 
+de se iniciar a partir do seu programa.
+
+Ex: Uso do SQLite em python
+
+import sqlite3
+conexão = sqlite3.connect("agenda.db")
+cursor = conexão.cursor()
+cursor.execute('''
+        create table agenda(
+            nome text,
+            telefone text)
+        ''')
+cursor.execute('''
+        insert into agenda (nome, telefone)
+            values(?, ?)
+            ''', ("Nilo", "7788-1432"))
+conexão.commit()
+cursor.close()
+conexão.close()
+
+- A conexão com o banco de dados se assemelha à manipulação de um arquivo, é a operação análoga a abrir
+um arquivo. O nome do banco de dados que está sendo criado será gravado em "agenda.db". A grande vanta-
+gem de um banco de dados é que o registro de informações e toda manutenção dos dados dsão feitos automa-
+ticamente pra você com comandos SQL.
+
+- Em seguida foi criado um cursor. Cursores são objetos utilizdos para enviar comandos e receber resul-
+tados do banco de dados. Um cursor é criado para uma conexão, chamando-se o método cursor(). Uma vez que
+obtivemos um cursor, nós podemos enviar comandos ao banco de dados. O primeiro deles é criar uma tabela
+para guardar nomes e telefones. Vamos chama-la na agenda:
+
+"create table agenda(nome text, telefone text)"
+
+- O comando SQL usado pra criar tabelas é "create table". Esse comando precisa do nome da tabela a criar
+nesse exemplo, agenda e uma lista de campos entra parênteses. Nome e telefone são nossos campos e "text"
+é o tipo. A maioria dos bancos de dados exige um tipo para cada campo. Um campo do tipo "text" pode ar-
+mazenar dados como uma string do Python.
+
+- Foi utilizado o método "execute" do cursor para enviar o comando ao banco de dados.
+
+- Com a tabela criada, podemos começar a introduzir nossos dados, o comando SQL usado para inserir um 
+registro na tabela é:
+
+"insert into agenda (nome, telefone) values(?, ?)"
+
+- O comando "insert" precisa do nome da tabela, onde iremos inserir os dados, e também do nome dos cam-
+pos e seus respectivos valores. "into" faz parte do comando "insert" e é escrito antes do nome da tabela
+O nome dos campos é escrito logo a seguir, separados por vírgula e, dessa vez, não precisamos mais in-
+formar o tipo dos campos, apenas a lista de nomes. Os valores que vamos inserir na tabela são especi-
+ficados também entre parênteses, mas na segunda parte do comando "insert" que começa apos a palavra
+"values". No exemplo, a posição de cada valor foi marcada com interrogações, uma para cada campo.
+A ordem dos valores é a mesma dos campos; logo, a primeira interrogação se refere ao campo "nome" e a 
+seguda ao campo "telefone".
+
+- O método "execute" foi utilizado novamente, agora para executar o comando "insert", mas, dessa vez,
+passamos os dados logo após o comando. No exemplo "Nilo" e "7788-1432" irão subistituir a primeira e a
+segunda interrogação quando o comando for executado.
+
+- Quando o comando é executado os dados foram enviados ao banco de dados, mas ainda não estão defini-
+tivamente gravados. isso acontece pois estamos usando uma transação (Não explicou o que era...).
+
+EX Consulta no banco de dados:
+
+import sqlite3
+conexão = sqlite3.connect("agenda.db")
+cursor = conexão.cursor()
+cursor.execute("select * from agenda")
+resultado = cursor.fetchone()
+print(f"Nome: {resultado[0]}\nTelefone: {resultado[1]}")
+cursor.close()
+conexão.close()
+
+- O comando SQL que realiza uma consulta é o comando "select"
+
+"select * from agenda"
+
+- O comando "select", em sua forma mais simples, utiliza uma  lista de campos e uma lista de tabelas.
+Em nosso exemplo, a lista de campos foi substituida por *. O asterisco representa todos os campos da
+tabela sendo consultada, nesse caso "nome" e "telefone". A palavra from é utilizada para seárar a lista
+de campos da lista de tabelas.
+
+- Para acessar os resultadaos do comando "select", devemos utilizar o método "fetchone". Esse método
+retorna uma tupla com os resultados de nossa consulta ou "None", caso a tabela esteja vazia.
+
+- A principal diferença entre o método "execute" e "executemany" é que "executemany" trabalha com vários
+valores.
+
+- O método "fetchall" retorna uma lista de tuplas. Cada elemento dessa lista é uma tupla contendo todos
+os campos retornados pela consulta e retorna "None" caso o resultado da consulta seja vazio. O método
+"fetchall" é interessantes para consultas pequenas, mas para consultas com mais de 100 registros, outros
+métodos são mais interessantes.
+
+- Você pode ler "fetch" como obter; logo, "fetchone" seria obter um resultado e "fetchall" obter todos
+os resultados.
+
+- A estrutura "with" do python pode nos ajudar a não nos esquercermos de chamar os métodos "close" de 
+nossos objetos. Uma das vantagens de utilizarmos "with" é que criamos um bloco onde um objeto é tido
+como válido. Se algo acontecer dentro desse bloco, como uma exceção, a estrutura "with" garante que o 
+método "close" será chamado. Na realidade, "with" chama o método "__exit__" no fim do bloco e funciona 
+muito bem com arquivos e conexões de banco de dados mas, cursores não possuem o método "__exit__",
+obrigado-nos a chamar manualmente o método "close".
+
+- A facilidade de um sistemas de banco de dados começa a aparecer quando precisamos procurar e alterear
+dados. Vamos utilizar uma variação do comando "select" para mostrar apenas alguns registros. Pesquisas
+em SQL são feitas com a cláusula "where" que funciona de forma parecida a um filtro:
+
+" select * from agenda where nome = "Nilo" "
+
+- Veja que apenas acrescentamos a cláusula "where" após o nome da tabela. O critério de pesquisa deve
+ser escrito como uma expressão, no caso (nome = "Nilo").
+
+- O "or" da linguagem SQL funciona dr forma semelhante ao "or" do python e os operadores relacionais
+"and" e "not" ffuncionam exatamente como em python e podem ser usados em expressóes SQL também.
+
+- O comando "updade" serve apra alterar os registros do banco de dados. Por exemplo, vamos alterar
+o registro telefone de "Nilo" para "12345-6789":
+
+" update agenda set telefone = "12345-6789" where nome = 'Nilo' "
+
+- A Cláusula "where" funciona como no comando "select". A segunda parte do comando "update" é a cláusula
+"set" que é usada para indicar o que fazer nos registros selecionados pela expressão "where".
+
+- As mesmas regras do comando "select" servem para o comando "update". Se os calores não forem constan-
+tes, você tem que utilizar parâmetros.
+
+- O comando "update" pode alterar mais de um registro de uma vez só. Sem a cláusula "where", todos os 
+registros serão selecionados e alterados:
+
+" update agenda set telefone = "12345-6789" "
+
+- A prorpiedade "rowcount" do cursor serve para saber quantos registros foram alterados por nosso update
+e é interessante para confirmarmos o resultado de comandos de atualização, como o "update".
+
+- Como já sabemos, o método "commit" grava as alterações. O método "rollback" faz o inverso, abortando
+as alterações e deixando o banco de dados como antes. os métodos "commit" e "rollback" fazem o controle
+de transações do banco de dados.
+
+- Podemos entender uma transação como um conjunto de operações que deve ser executado completamente.
+Isso significa operações que não fazem sentido serem salvas dentro de um grupo de operações. Se a exe-
+cução do grupo falhar, todas as alterações causadas durante a transação corrente devem ser revertidas
+(rollback). Caso tudo ocorra como planejado, as operações serão armazenadas definitivamente no banco de
+dados (commit).
+
+- O comando "delete" apaga registros com base em um critério de seleção, especificado da cláusula
+"where":
+
+" delete from agenda where nome = 'Maria' "
+
+- Acessar os campos por posição nem sempre é tão fácil. Usando SQLite, podemos acessá-los pelo nome,
+adicionando uma linha:
+
+" conexão.row_factory = sqlite3.row "
+
+Ex: acessando campos pelo nome:
+
+import sqlite3
+
+conexão = sqlite3.connect("agenda.db")
+conexão.row_factory = sqlite3.Row
+cursor = conexão.cursor()
+for registro in cursor.execute("select * from agenda"):
+    print("Nome: %s\nTelefone: %s" % (registro["nome"], registro["telefone"]))
+cursor.close()
+conexão.close()
+
+
+- Dessa forma, registro pode ser acessado como se fosse um dicionário, onde o nome do campo é usado como
+chave. Outra facilidaade que essa linha traz é que as chaves são aceitas independentemente se escrever-
+mos nomes dos campos em maiúsculas ou minúsculas. por exemplo:
+
+" print ("Nome: %s\nTelefone: %s" % (registro["NOME"], registro["Telefone"])) "
+
+- conforme nossas tabelas crescem, trabalhar com dados pode não ser a melhor solução, e precisaremos
+acrescentar campos para manter o banco de dados. Uma dessas necessidades é identificar cada registro de
+maneira única. Nós podemos utilizar dados que não se repetem como o nome da pessoa, como uma chave pri-
+mária. Podemos entender chave primária como a chave do de um dicionário, mas, nesse caso para tabelas em
+nosso banco de dados. Uma alternativa pra isso é a geração automática de chaves:
+
+Ex: geração automática de chaves:
+
+create table estados(
+                  id integer primary key autoincrement,
+                  nome text, 
+                  população integer)
+
+- No exemplo, id é do tipo integer, ou seja, números inteiros, id é o campo que foi escolhido para ser
+chave primária e escrevemos "primary key autoincremente" para que o SQLite gere nímeros automaticamente
+
+- podemos utilizar a cláusula "order by" para ordenar os resultados de nossa consulta:
+
+EX: ordenação por nome:
+
+"select * form estados order by nome"
+
+EX: ordenação por população:
+
+"select form estados * order by população"
+
+ou de forma decrescente:
+
+"select form estados * order by população desc"
+
+- Em SQL o comando utilizado para alterar os campos de uma tabela é o "alter table"
+
+- Um banco de dados pode realizar operações de agrupamento de dados faculmente como por exemplo, soli-
+citar o valor mínimo, máximo ou a média de um grupo de registros.
+
+- Para exibir quantos registros fazem parte desse grupo usamos a função "count". A cláusula SQL que in-
+dica agrupamento é o "group by", seguida do nome dos campos que compõem o grupo. Imagine que um banco
+vai concatenar cada um desses campos, criando um valor para cada registro. Vamos chamar esse valor de
+"chave de grupo". Todos os registros com a mesma chave de grupo fazem parte do mesmo grupo e serão re-
+presentados por apenas um registro na consulta de seleção. Essa consulta com grupo só pode conter campos
+utilizados para compor a chave de grupo e funções de agrupamento de dados como "min"(mínimo), "max"(má-
+ximo), "avg"(média), "sum"(soma) e "count"(contagem).
+
+EX: agrupar os estados por região:
+
+"select região, count(*) from esatdos group by região"
+
+- Você pode utilizar a cláusula "as" do SQL para dar nomes ás colunas de uma consulta.
+
+- Podemos filtrar os resultados após o agrupamento, usando a cláusula "having". A diferença entre o
+"where" e o "having" é que o "where" é executada antes do agrupamento, selecionando os registros que fa-
+rão parte do resultado, antes do agrupamento ser realizado. A cláusula "having", avalia o resultado do
+agrupamento e decide quais farão parte do resultado final.
+
+- SQLite também trabalha com datas mas, o tipo DATE não é suportado diretamente, gernado uma certa con-
+fusão entre datas e strings:
+
+EX: criação de tabela com um campo do tipo data:
+
+import sqlite3
+feriados = [["2018-01-01", "Confraternização Universal"], ["2018-04-21", "Tiradentes"], 
+["2018-05-01", "Dia do trabalhador"], ["2018-09-07", "Independência"], 
+["2018-10-12", "Padroeira do Brasil"], ["2018-11-02", "Finados"], 
+["2018-11-15", "Proclamação da República"], ["2018-12-25", "Natal"]]
+
+with sqlite3.connect("brasil.db") as conexão:
+    conexão.execute("create table feriados(id integer primary key autoincrement, data date, 
+         descrição text)")
+    conexão.executemany("insert into feriados(data,descrição) values (?,?)", feriados)
+
+- As datas foram escritas no formato ISO, ou seja, ANO-MÊS-DIA. Nesse formato a data do Natal 
+(25/12/2014) é escrita como 2014/12/25. Escrever datas nesse formato é caracteristica do SQLite.
+
+-
+
+
+
+
+ 
+

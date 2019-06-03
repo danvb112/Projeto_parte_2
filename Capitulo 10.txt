@@ -1,0 +1,123 @@
+Classes e Objetos
+
+- Classes são a definição de um novo tipo de dado que acossia dados e operações em uma só estrutura. Um
+Objeto pode ser entendido como uma vriável cujo tipo é uma classe, ou seja, um objeto é uma instância de
+uma classe
+
+- Podemos entender um obejto em Python como a representação de um objeto do mundo real, escrita em uma 
+linguagem de programação. Essa represetação é limitada pela quantidade de detalhes que podemos ou quere-
+mos representar.
+
+- Utilizamos a instrução "class" para indicar a declaração de uma nova classe e ":" para iniciar seu
+bloco. Os tipos strings e list são classes predefinidas do python. Quando criamos uma lista ou uma 
+string, estamos instanciando ou criando uma instância dessas classes, ou seja, um objeto. Quando defi-
+nimos nossas próprias classes, podemos criar nossos próprios métodos e atributos.
+
+EX: Classe televisão
+
+class Televisão:
+    def __init__(self):
+        self.ligada = False
+        self.canal = 2
+
+>>> tv = Televisão()
+>>> tv.ligada
+False
+>>> tv.canal
+2
+>>> tv_sala = Televisão()
+>>> tv_sala.ligada = True
+>>> tv_sala.canal = 4
+
+- Métodos nada mais são que funções associadas a uma classe. O método "__init__" será chamado sempre
+que criarmos objetos da classe, sendo por isso chamado de construtor. Um método construtor é chamado 
+sempre que um objeto da classe é instanciado. É o construtor que inicializa nosso novo objeto com seus 
+valores-padrão. O método "__init__" recebe um parâmetro chamado "self".
+
+- "self.ligada" é um valor de "self", ou seja, do objeto televisão. Todo método em python tem "self"
+como primeiro parâmetro. Dizemos que "self.ligada" é um atributo do objeto. Como "self" representa 
+o objeto em si, escrevemos "self.ligada". Sempre que quisermos especificar atributos de objetos, devemos
+associá-los a "self".
+
+- No exemplo criamos um objeto tc utilizando a classe Televisão. Dizemos que "tv" agora é um objeto da
+classe Televisão. Quando criamos um objeto, o método construtor de sua classe é chamado, em python
+"__init__"
+
+- Também foi criado um outro objeto da classe Televisão chamado "tv_sala". "tv" e "tv_sala" são dois
+objetos independentes, podendo caum ter seus próprios valores, como duas televisões no mundo real.
+
+EX listagem 10.2
+
+class Televisão:
+       def __init__(self):
+           self.ligada = False
+           self.canal = 2
+       def muda_canal_para_baixo(self):
+           self.canal -= 1
+       def muda_canal_para_cima(self):
+           self.canal += 1
+
+- Veja que passamos também um parâmetro "self", que representa o objeto em si. Observe que escrevemos
+diretamente "self.canal -=1", utilizando o atributo canal da televisão. Isso é possível porque criamos
+o atributo canal no construtor (__init__). É usando atributos que podemos armazenar valores entre as
+chamadas dos métodos.
+
+- A grande vantagem de usar classes e objetos é facilitar a construção dos programas. Não precisamos
+enviar o canal atual da televisão ao método "muda_canal_pra_cima", simplificando a chamada od método.
+Esse efeito "memória" facilita a configuração de objetos complexos, pois armazenamos as caracteristicas
+importantes em seus atributos, evitando repassar esses valores a cada chamada.
+
+- Tudo o que aprendemos com funções é também válido para métodos. A principal diferença é que um método
+é associado a uma classe e atua sobre um objeto. O primeiro parâmetro do método é chamado "self" e re-
+presenta a instância sobre a qual o método atuará. é por meio de "self" que teremos acesso aos outros
+métodos de uma classe, preservando todos os atributos de nossos objetos. Você não precisa passar o
+objeto como primeiro parâmetro ao chamar um método, o interpretador python faz isso automaticamente
+para você. Entretanto. não se esqueça de declarar "self" como primeiro parâmetro de seus métodos.
+
+- A orientação a objeto permite modificar nossas classes, adicionando ou modificando atributos e métodos
+tendo por base outra classe. Esse formato de declaração é chamado de herança, ou seja, crie uma nova
+classe herdando todos os métodos e atributos de uma classe anterior já criada.
+
+- Toda vez que você utilizar herança, o método construtor da superclasse deve ser chamado. É assim que 
+reutilizamos as definições já realizadas na superclasse, evitando ter que reescrever as atribuições.
+
+- Chamar a inicialização da superclasse também tem outras vantagens, como garantir que modificações no 
+construtor da superclasse não tenham que ser duplicadas em todas as subclasses.
+
+- Utilizando herança, modificamos muito pouco nosso programa, mantendo a funcionalidade anterior e adi-
+cionando novos recursos, tudo isso reutilizando métodos que já haviam sido definidos em uma classe ante-
+rior.
+
+- Outra vantagem é que se mudarmos algo na superclasse, essas mudanças também serão usadas pelas sub-
+classes.
+
+- Python possui vários métodos mágicos, métodos especiais que têm o fotmato "__nome__". O método
+"__init__", usado em nossos construtores é um método mágico, "__len__", "__getitem__" e "__iter__" tam-
+bém. Esses métodos permitem dar outro comportamento a nossas classes e usa-las quase que como classes da
+própria linguagem. A utilização desses métodos não é obrigatória, mas possibilita uma grande flexibili-
+dade para nossas classes.
+
+- Em python existem métodos especiais de comparação, sendo eles: "__eq__" equivalente a (==), "__neq__"
+equivalente a (!=), "__lt__" equivalente a (<) e "__gt__" equivalente a (>)
+
+- O decorador "@total_orderning" do módulo "functools" é responsável por implementar, ou seja, gerar
+o código respnsável pela implementação de todos os métodos de comparação especiais, a partir de "__eq__"
+e de "__lt__". Dessa forma "__neq__" será a negação de "__eq__"; "__gt__", a negação de "__lt__";
+"__le__", a combinação de "__lt__" com "__eq__"; e "__ge__", a combinação de "__gt__" com "__eq__",
+implementando assim, todos os operadores de comparação (==, !=, >, <, >=, <=).
+
+- Outro decoarador é o "@starticmethod" que cria um método estático, isto é, im método que pode ser 
+chamado apenas com o nome da classe, não necessitando de um objeto para ser chamado.
+
+- Outros decoradores como o "@property" e o "@nome.setter" modificam o método abaixo deles, transfor-
+mando-os em propriedades. (não explica bem o que é propriedade no livro zzzzz)
+
+- Outro detalhe importante é que ao acrescentar duas sublinhas (__) antes dos nomes ods atributos (EX:
+"__nome" "__chave") fazem eles ficarem escondidos quando acessados de fora da classe. Esse "esconder"
+é apenas um detalhe da implementação do python, que modifica o nome desses atributos de forma a torna-
+los inacessíveis. Em python preste muita atenção ao utilizar nomes que começam com "_" ou "__" pois,
+esses símbolos indicam que esses atributos não devem ser acessados, exceto pelo código da própria classe
+
+- Não confundir os atributos protegidos que começam com "__", com o nome dos métodos mágicos ou espe-
+ciais que ja vimos, que começam e terminam por "__".
+
