@@ -35,7 +35,6 @@ cursor.execute("""
         periodo TEXT NOT NULL,
         disciplina_id INTEGER NOT NULL FOREING KEY(turmas_disciplina) REFERENCES disciplinas(id)
         professor_id INTEGER NOT NULL FOREING KEY(turmas_professor) REFERENCES professores(id)
-
     )
 """)
 
@@ -48,4 +47,7 @@ cursor.execute("""
 
 """)
 
+conexao.commit()
+cursor.close()
 conexao.close()
+
