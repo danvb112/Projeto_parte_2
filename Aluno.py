@@ -1,10 +1,10 @@
 import sqlite3
 
-class Aluno():
+class Aluno:
 
-    def __init__(self, nome, cpf):
-        self.nome = nome
-        self.cpf = cpf
+    def __init__(self):
+        self.nome = ""
+        self.cpf = ""
     
     def get_nome(self):
         return self.nome
@@ -18,17 +18,25 @@ class Aluno():
     def set_cpf(self, novo_cpf):
         self.cpf = novo_cpf
     
-    def adicionar(self):
+    def adicionar_ao_banco(self):
         conexao = sqlite3.connect("database.db")
         cursor = conexao.cursor()
-        cursor.execute("""
+        try:
+            cursor.execute("""
                 INSERT INTO alunos(nome, cpf) VALUES (?, ?)   
-        """, (self.nome, self.cpf))
+                """, (self.nome, self.cpf))
+            pass
+        except Exception as erro:
+            print(erro)
+            cursor.close()
+            conexao.close()
+            return erro
         cursor.close()
         conexao.commit()
         conexao.close()
-    
-    def apagar(self):
+        return True
+
+    def apagar_do_banco(self):
         conexao = sqlite3.connect("database.db")
         cursor = conexao.cursor()
         cursor.execute("""
@@ -38,23 +46,23 @@ class Aluno():
         conexao.commit()
         conexao.close()
     
-    def atualizar(self, novo_nome, novo_cpf):
+    def atualizar_banco(self, novo_nome, novo_cpf):
         conexao = sqlite3.connect("database.db")
         cursor = conexao.cursor()
         cursor.execute("""
                 UPDATE alunos were nome = (?) SET cpf = (?) AND SET nome = (?) 
-        """, (self.nome,novo_cpf, novo_nome))
+        """, (self.nome, novo_cpf, novo_nome))
         cursor.close()
         conexao.commit()
         conexao.close
     
-    def listar(self):
+    def listar_todos(self):
         conexao = sqlite3.connect("database.db")
         cursor = conexao.cursor()
         cursor.execute("SELECT * FROM alunos")
         lista_alunos = cursor.fetchall()
         for nome_cpf in lista_alunos:
-            print("Nome: {}    CPF: {}".format(nome_cpf[0], nome_cpf[1]))
+            print("Nome: {}    CPF: {}".format(nome_cpf[1], nome_cpf[2]))
         cursor.close()
         conexao.commit()
         conexao.close()
