@@ -1,10 +1,10 @@
 import sqlite3
 
-class Disciplina():
+class Disciplina:
 
-    def __init__(self, codigo, nome):
-        self.nome = nome
-        self.codigo = codigo
+    def __init__(self):
+        self.nome = ""
+        self.codigo = ""
     
     def get_nome(self):
         return self.nome
@@ -21,9 +21,16 @@ class Disciplina():
     def adicionar(self):
         conexao = sqlite3.connect("database.db")
         cursor = conexao.cursor()
-        cursor.execute("""
-            INSERT INTO disciplinas(nome, codigo) VALUES (?,?)
-        """, (self.nome, self.codigo))
+        try:
+            cursor.execute("""
+                INSERT INTO disciplinas(nome, codigo) VALUES (?,?)
+            """, (self.nome, self.codigo))
+            pass
+        except Exception as erro:
+            print(erro)
+            cursor.close()
+            conexao.close()
+            return erro
         cursor.close()
         conexao.commit()
         conexao.close()
@@ -32,8 +39,8 @@ class Disciplina():
         conexao = sqlite3.connect("database.db")
         cursor = conexao.cursor()
         cursor.execute("""
-                DELETE FROM disciplinas were codigo = (?)
-        """, (self.codigo))
+                DELETE FROM disciplinas WHERE codigo = (?)
+        """, (self.codigo,))
         cursor.close()
         conexao.commit()
         conexao.close()
@@ -42,7 +49,7 @@ class Disciplina():
         conexao = sqlite3.connect("database.db")
         cursor = conexao.cursor()
         cursor.execute("""
-                UPDATE disciplinas were codigo = (?) SET nome = (?) AND SET codigo = (?) 
+                UPDATE disciplinas WHERE codigo = (?) SET nome = (?) AND SET codigo = (?) 
         """, (self.codigo, novo_nome, novo_codigo))
         cursor.close()
         conexao.commit()
@@ -53,8 +60,10 @@ class Disciplina():
         cursor = conexao.cursor()
         cursor.execute("SELECT * FROM disciplinas")
         Lista_disciplinas = cursor.fetchall()
+        print("\n--- Lista com todas as disciplinas registradas ---")
+        print("=" *50)
         for info_disciplinas in Lista_disciplinas:
-            print("Nome: {}   Codigo: {}".format(info_disciplinas[0], info_disciplinas[1]))
+            print("Nome: {}   Codigo: {}".format(info_disciplinas[1], info_disciplinas[2]))
         cursor.close()
         conexao.commit()
         conexao.close()

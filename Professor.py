@@ -1,11 +1,11 @@
 import sqlite3
 
-class Professor():
+class Professor:
 
-    def __init__(self, nome, cpf, departamento):
-        self.nome = nome
-        self.cpf = cpf
-        self.departamento
+    def __init__(self):
+        self.nome = ""
+        self.cpf = ""
+        self.departamento = ""
     
     def get_nome(self):
         return self.nome
@@ -27,10 +27,16 @@ class Professor():
     
     def adicionar(self):
         conexao = sqlite3.connect("database.db")
-        cursor = conexao.cursor()
-        cursor.execute("""
-                INSERT INTO professores (nome, cpf, departamento) VALUES (?,?,?)
-        """, (self.nome, self.cpf, self.departamento))
+        cursor = conexao.cursor() 
+        try:
+            cursor.execute("""
+                    INSERT INTO professores (nome, cpf, departamento) VALUES (?,?,?)
+            """, (self.nome, self.cpf, self.departamento))
+        except Exception as erro:
+            print(erro)
+            cursor.close()
+            conexao.close()
+            return erro
         cursor.close()
         conexao.commit()
         conexao.close()
@@ -39,8 +45,8 @@ class Professor():
         conexao = sqlite3.connect("database.db")
         cursor = conexao.cursor()
         cursor.execute("""
-                DELETE FROM professores were cpf = (?)
-        """, (self.cpf))
+                DELETE FROM professores WHERE cpf = (?)
+        """, (self.cpf,))
         cursor.close()
         conexao.commit()
         conexao.close()
@@ -49,19 +55,21 @@ class Professor():
         conexao = sqlite3.connect("database.db")
         cursor = conexao.cursor()
         cursor.execute("""
-                UPDATE professores were cpf = (?) SET nome = (?) AND SET cpf = (?) AND SET departamento = (?) 
+                UPDATE professores WHERE cpf = (?) SET nome = (?) AND SET cpf = (?) AND SET departamento = (?) 
         """, (self.cpf, novo_nome, novo_cpf, novo_departamento))
         cursor.close()
         conexao.commit()
         conexao.close()
 
     def lsitar(self):
-        conexao = sqlite3.connect()
+        conexao = sqlite3.connect("database.db")
         cursor = conexao.cursor()
         cursor.execute("SELECT * FROM professores")
         lista_professores = cursor.fetchall()
+        print("\n--- Lista de todos os professores registrados ---")
+        print("=" * 50)
         for prof_info in lista_professores:
-            print("Nome {}    CPf: {}\nDepartamento: {}".format(prof_info[0], prof_info[1], prof_info[2]))
+            print("Nome {}    CPf: {}\nDepartamento: {}".format(prof_info[1], prof_info[2], prof_info[3]))
         cursor.close()
         conexao.commit()
         conexao.close()
