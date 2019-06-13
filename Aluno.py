@@ -56,9 +56,7 @@ class Aluno:
         cursor = conexao.cursor()
         try:
             cursor.execute("""
-                    UPDATE alunos 
-                    SET cpf = "{}", 
-                    SET nome = "{}"  WHERE cpf = "{}" 
+                    UPDATE alunos SET cpf = "{}", nome = "{}"  WHERE cpf = "{}" 
             """.format(novo_cpf, novo_nome, self.cpf))
         except Exception as erro:
             print(erro)

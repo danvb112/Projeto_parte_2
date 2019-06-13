@@ -13,7 +13,6 @@ def home_menu():
         1 - Alunos
         2 - Professores
         3 - Disciplinas
-        4 - Turmas
 
         0 - Sair
 
@@ -29,8 +28,6 @@ def home_menu():
             professores_menu()
         if opcao_menu == "3":
             disciplina_menu()
-        if opcao_menu == "4":
-            turma_menu()
         if opcao_menu == "0":
             exit()
         else:
@@ -80,10 +77,10 @@ def alunos_menu():
         if opcao == "3":
             aluno.set_cpf(input("Digite o cpf: "))
             if aluno.apagar_do_banco():
-                print("Aluno apagado com sucesso")
+                print("Aluno não existente")
                 alunos_menu()
             else:
-                print("Aluno não existente")
+                print("Aluno apagado com sucesso")
                 alunos_menu()
         
         
@@ -92,10 +89,10 @@ def alunos_menu():
             novo_nome = input("Digite o novo nome: ")
             novo_cpf = input("Digite o novo cpf: ")
             if not aluno.atualizar_banco(novo_nome, novo_cpf):
-                print("Aluno não existente!")
+                print("Aluno atualizado com sucesso!")
                 alunos_menu()
             else:
-                print("Aluno atualizado com sucesso!")
+                print("Aluno não existente!")
                 alunos_menu()
         if opcao == "0":
             home_menu()
@@ -132,25 +129,22 @@ def professores_menu():
             professor.lsitar()
             professores_menu()
         if opcao == "2":
-            
             professor.set_nome(input("Digite o nome: "))
             professor.set_cpf(input("Digite o cpf: "))
-            professor.set_departamento(input("Digite o departamento: "))
-            
+            professor.set_departamento(input("Digite o departamento: "))  
             if professor.adicionar():
-                print("\n--- Professor adicionado com sucesso! ---\n")
+                print('\n--- Professor já existe ---\n')
                 professores_menu()
             else:
-                print('\n--- Professor já existe ---\n')
+                print("\n--- Professor adicionado com sucesso! ---\n")
                 professores_menu()
         if opcao == "3":
             professor.set_cpf(input("Digite o cpf: "))
-            
             if professor.apagar():
-                print("\n--- Professor deletado ---\n")
+                print('\n--- Professor nao existente. ---\n')
                 professores_menu()
             else:
-                print('\n--- Professor nao existente. ---\n')
+                print("\n--- Professor deletado ---\n")
                 professores_menu()
         if opcao == "4":
             professor.set_cpf(input("Digite o cpf: "))
@@ -158,10 +152,10 @@ def professores_menu():
             novo_cpf = input("Digite o cpf atualizado: ")
             novo_departamento = input("Digite o departamento atualizado: ")
             if professor.atualizar(novo_nome, novo_cpf, novo_departamento):
-                print("\n--- Professor atualizado com sucesso ---")
+                print("\n--- Professor não registrado ---")
                 professores_menu()
             else:
-                print("\n--- Professor não registrado ---")
+                print("\n--- Professor atualizado com sucesso ---")
                 professores_menu()
 
         if opcao == "0":
@@ -204,26 +198,25 @@ def disciplina_menu():
         if opcao == '2':
             disciplina.set_nome(input("Digite o nome: "))
             disciplina.set_codigo(input("Digite o codigo: "))
-            
             if disciplina.adicionar():
-                print("\n--- Disciplina cadastrada com sucesso ---\n")
+                print("\n --- Disciplina já cadastrada! ---\n")
                 disciplina_menu()
             else:
-                print("\n --- Disciplina já cadastrada! ---\n")
+                print("\n--- Disciplina cadastrada com sucesso ---\n")
                 disciplina_menu()
         if opcao == '3':
             disciplina.set_codigo(input("Digite o codigo: "))
             if disciplina.apagar():
-                print("\n--- Disciplina deletada ---\n")
-                disciplina_menu()
-            else:
                 print(("\n--- Disciplina não cadastrada ---\n"))
                 disciplina_menu()
+            else:
+                print("\n--- Disciplina deletada ---\n")
+                disciplina_menu()
         if opcao == '4':
-            disciplina.set_codigo("Digite o codigo: ")
-            novo_codigo = input("Digite o codigo atualizado: ")
+            disciplina.set_codigo(input("Digite o codigo: "))
             novo_nome = input("Digite o nome atualizado: ")
-            if disciplina.atualizar(novo_nome, novo_codigo):
+            novo_codigo = input("Digite o codigo atualizado: ")
+            if not disciplina.atualizar(novo_nome, novo_codigo):
                 print("\n--- Disciplina Atualizada ---\n")
                 disciplina_menu()
             else:

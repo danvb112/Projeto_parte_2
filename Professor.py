@@ -44,9 +44,16 @@ class Professor:
     def apagar(self):
         conexao = sqlite3.connect("database.db")
         cursor = conexao.cursor()
-        cursor.execute("""
-                DELETE FROM professores WHERE cpf = (?)
-        """, (self.cpf,))
+        try:
+            cursor.execute("""
+                    DELETE FROM professores WHERE cpf = (?)
+            """, (self.cpf,))
+        except Exception as erro:
+            print(erro)
+            cursor.close
+            conexao.close
+            return erro
+            
         cursor.close()
         conexao.commit()
         conexao.close()
@@ -54,9 +61,16 @@ class Professor:
     def atualizar(self,novo_nome, novo_cpf, novo_departamento):
         conexao = sqlite3.connect("database.db")
         cursor = conexao.cursor()
-        cursor.execute("""
-                UPDATE professores WHERE cpf = (?) SET nome = (?) AND SET cpf = (?) AND SET departamento = (?) 
-        """, (self.cpf, novo_nome, novo_cpf, novo_departamento))
+        try:
+            cursor.execute("""
+                    UPDATE professores SET nome = "{}", cpf = "{}", departamento = "{}" WHERE cpf = "{}"
+            """.format(novo_nome, novo_cpf, novo_departamento, self.cpf))
+        except Exception as erro:
+            print(erro)
+            cursor.close
+            conexao.close
+            return erro
+            
         cursor.close()
         conexao.commit()
         conexao.close()
