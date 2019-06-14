@@ -1,3 +1,5 @@
 import menu
+import GUI
 
-menu.home_menu()
+GUI.home_menu()
+
