@@ -27,26 +27,6 @@ cursor.execute("""
         codigo TEXT NOT NULL UNIQUE )
 """)
 
-cursor.execute("""
-    CREATE TABLE turmas(
-        id INTEGER PRIMARY KEY NOT NULL,
-        nome TEXT NOT NULL,
-        codigo TEXT NOT NULL,
-        periodo TEXT NOT NULL,
-        disciplina_id INTEGER NOT NULL FOREING KEY(turmas_disciplina) REFERENCES disciplinas(id)
-        professor_id INTEGER NOT NULL FOREING KEY(turmas_professor) REFERENCES professores(id)
-    )
-""")
-
-cursor.execute("""
-    CREATE TABLE alunos_turma(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        aluno_id INTEGER NOT NULL FOREING KEY(turma_aluno) REFERENCES alunos(id)
-        turma_id INTEGER NOT NULL FOREING KEY(aluno_turma) REFERENCES turmas(id)
-    )
-
-""")
-
 conexao.commit()
 cursor.close()
 conexao.close()

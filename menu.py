@@ -48,7 +48,6 @@ def alunos_menu():
         2 - Adicionar
         3 - Deletar
         4 - Atualizar
-        5 - Gravar informações
         
         0 - Voltar
 
